@@ -1,0 +1,1 @@
+export const MAIN_CONTAINER_ID = 'soundcloud-app';
