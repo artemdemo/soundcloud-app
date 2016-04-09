@@ -1,0 +1,34 @@
+@import url(http://fonts.googleapis.com/css?family=Didact+Gothic&subset=latin,cyrillic);
+
+@logo-color: #c7093d;
+@text-color: #1c1c1c;
+
+@left-column: 110px;
+@right-column: 200px;
+
+body {
+    color: @text-color;
+    font-family: 'Didact Gothic', sans-serif;
+    background-image: url('../img/bg_dark.jpg');
+}
+
+.clearFix{
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+* { box-sizing: border-box; }
+
+@import "./blocks/link";
+@import "./blocks/logo";
+@import "./blocks/regulator";
+@import "./blocks/search";
+@import "./blocks/flat-list";
+@import "./blocks/container";
+@import "./blocks/main-body";
+@import "./blocks/main-header";
+
+@import "./blocks/footer";
