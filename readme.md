@@ -2,9 +2,18 @@
 
 In browser music app that uses sundcloud open API
 
-## Important - API KEY
+## Important - API KEY (CLIENT ID)
 
-You need to get your own API KEY. This app wouldn't work without one.
+You need to get your own API KEY (CLIENT ID). This app wouldn't work without one.
+
+After yo have your API KEY (CLIENT ID) you need to save it in file `soundcloud-key.json`:
+
+Format should be as following:
+```json
+{
+    "CLIENT_ID": "your_id_string"
+}
+```
 
 ## Getting started
 

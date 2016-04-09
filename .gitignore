@@ -3,4 +3,5 @@ node_modules
 *.log
 
 index.html
+soundcloud-key.json
 !source/index.html
