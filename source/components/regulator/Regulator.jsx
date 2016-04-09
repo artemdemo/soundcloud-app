@@ -1,5 +1,8 @@
 import * as React from 'react';
 import {Progress} from './Progress';
+import {Backward} from './Backward';
+import {Play} from './Play';
+import {Forward} from './Forward';
 
 export class Regulator extends React.Component {
     state = {
@@ -18,9 +21,9 @@ export class Regulator extends React.Component {
                     <img className="avatar__image" ng-src="{{ avatar }}" />
                 </div>
                 <div className="player-controls">
-                    <backward></backward>
-                    <play></play>
-                    <forward></forward>
+                    <Backward></Backward>
+                    <Play></Play>
+                    <Forward></Forward>
                 </div>
                 <Progress></Progress>
                 <div className="timer">

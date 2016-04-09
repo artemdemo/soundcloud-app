@@ -2,6 +2,9 @@ import * as React from 'react';
 import {Logo} from '../components/Logo';
 import {Regulator} from '../components/regulator/Regulator';
 import {Search} from '../components/Search';
+import {Genres} from '../components/Genres';
+import {Catalog} from '../components/Catalog';
+import {Comments} from '../components/Comments';
 
 export default class IndexPage extends React.Component {
     state = {};
@@ -22,11 +25,11 @@ export default class IndexPage extends React.Component {
                 </div>
                 <div className="main-body">
 
-                    <genres></genres>
+                    <Genres></Genres>
 
-                    <catalog></catalog>
+                    <Catalog></Catalog>
 
-                    <comments></comments>
+                    <Comments></Comments>
                 </div>
                 <div className="footer">
                     <div className="footer__title">

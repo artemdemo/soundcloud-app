@@ -134,9 +134,22 @@ gulp.task('less', ['clean'], function () {
         });
 });
 
+gulp.task('copy', function () {
+    return gulp
+        .src([
+            './node_modules/font-awesome/fonts/FontAwesome.otf',
+            './node_modules/font-awesome/fonts/fontawesome-webfont.eot',
+            './node_modules/font-awesome/fonts/fontawesome-webfont.svg',
+            './node_modules/font-awesome/fonts/fontawesome-webfont.ttf',
+            './node_modules/font-awesome/fonts/fontawesome-webfont.woff',
+            './node_modules/font-awesome/fonts/fontawesome-webfont.woff2'
+        ])
+        .pipe(gulp.dest('dist/fonts'));
+});
+
 gulp.task('less-watch', () => {
     gulp.watch('./source/less/**/*.less', ['less']);
 });
 
-gulp.task('build', ['js', 'less']);
+gulp.task('build', ['copy', 'js', 'less']);
 gulp.task('watch', ['clean', 'js-watch', 'less', 'less-watch']);
