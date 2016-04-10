@@ -23,21 +23,31 @@ class SCStoreClass extends EventEmitter {
     }
 
     fetchClientId() {
-        axios.get('soundcloud-key.json')
-            .then((responseObject) => {
-                this.clientId = responseObject.data.CLIENT_ID;
-                this.emit(constants.CLIENT_ID_LOADED);
-            })
-            .catch(() => this.emit(constants.ERROR_CLIENT_ID_LOADING));
+        return new Promise((resolve, reject) => {
+            if (this.clientId) {
+                resolve();
+            }
+            axios.get('soundcloud-key.json')
+                .then((responseObject) => {
+                    this.clientId = responseObject.data.CLIENT_ID;
+                    resolve();
+                })
+                .catch(() => {
+                    this.emit(constants.ERROR_CLIENT_ID_LOADING);
+                    reject();
+                });
+        });
     }
 
     fetchLastSongs() {
-        axios.get(`${this.baseUrl}/tracks/?client_id=${this.clientId}`)
-            .then((responseObject) => {
-                this.songsList = responseObject.data;
-                this.emit(constants.SONGS_LOADED)
-            })
-            .catch(() => this.emit(constants.ERROR_SONGS_LOADING));
+        this.fetchClientId().then(() => {
+            axios.get(`${this.baseUrl}/tracks/?client_id=${this.clientId}`)
+                .then((responseObject) => {
+                    this.songsList = responseObject.data;
+                    this.emit(constants.SONGS_LOADED)
+                })
+                .catch(() => this.emit(constants.ERROR_SONGS_LOADING));
+        });
     }
 
     getSongsList = () => this.songsList;

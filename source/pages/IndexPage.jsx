@@ -5,6 +5,7 @@ import {Search} from '../components/Search';
 import {Genres} from '../components/Genres';
 import {Catalog} from '../components/catalog/Catalog';
 import {Comments} from '../components/Comments';
+import {ClientIdError} from '../components/ClientIdError';
 import * as constants from '../constants';
 import {SCAction} from '../actions/SCAction';
 import {SCStore} from '../stores/SCStore';
@@ -17,12 +18,7 @@ export default class IndexPage extends React.Component {
     }
 
     componentDidMount() {
-        SCStore.on(constants.CLIENT_ID_LOADED, SCAction.fetchLastSongs);
-        SCAction.fetchClientId();
-    }
-
-    componentWillUnmount() {
-        SCStore.removeListener(constants.CLIENT_ID_LOADED, SCAction.fetchLastSongs);
+        SCAction.fetchLastSongs();
     }
 
     render() {
@@ -48,6 +44,7 @@ export default class IndexPage extends React.Component {
                         // New songs
                     </div>
                 </div>
+                <ClientIdError></ClientIdError>
             </div>
         )
     }
