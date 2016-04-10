@@ -92,7 +92,7 @@ class SCStoreClass extends EventEmitter {
             });
         }
 
-        return genres
+        return genres;
     }
 }
 

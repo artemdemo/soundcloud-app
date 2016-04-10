@@ -1,10 +1,20 @@
 import * as React from 'react';
+import {Link} from 'react-router';
+import {SCStore} from '../stores/SCStore';
 
 export class Genres extends React.Component {
-    state = {};
+    state = {
+        genres: []
+    };
 
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        this.setState({
+            genres: SCStore.getGenres()
+        });
     }
 
     render() {
@@ -12,9 +22,11 @@ export class Genres extends React.Component {
             <div className="genres">
                 <div className="genres__title">Genres</div>
                 <ul className="genres__list flat-list">
-                    <li className="genres__list-item" ng-repeat="genre in ::genres">
-                        <a href="#/genre/{{ genre.id }}" className="link genres__link"> genre.name </a>
-                    </li>
+                    {this.state.genres.map(genre => (
+                        <li className="genres__list-item" key={genre.id}>
+                            <Link to={`/genre/${ genre.id }`} className="link genres__link">{ genre.name }</Link>
+                        </li>
+                    ))}
                 </ul>
             </div>
         )
