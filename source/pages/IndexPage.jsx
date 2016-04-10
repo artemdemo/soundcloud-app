@@ -3,22 +3,13 @@ import {Logo} from '../components/Logo';
 import {Regulator} from '../components/regulator/Regulator';
 import {Search} from '../components/Search';
 import {Genres} from '../components/Genres';
-import {Catalog} from '../components/catalog/Catalog';
 import {Comments} from '../components/Comments';
 import {ClientIdError} from '../components/ClientIdError';
-import * as constants from '../constants';
-import {SCAction} from '../actions/SCAction';
-import {SCStore} from '../stores/SCStore';
-
 export default class IndexPage extends React.Component {
     state = {};
 
     constructor(props) {
         super(props);
-    }
-
-    componentDidMount() {
-        SCAction.fetchLastSongs();
     }
 
     render() {
@@ -35,7 +26,7 @@ export default class IndexPage extends React.Component {
 
                     <Genres></Genres>
 
-                    <Catalog></Catalog>
+                    {this.props.children}
 
                     <Comments></Comments>
                 </div>

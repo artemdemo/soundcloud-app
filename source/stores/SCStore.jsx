@@ -18,6 +18,9 @@ class SCStoreClass extends EventEmitter {
                 case (constants.FETCH_LAST_SONGS):
                     this.fetchLastSongs();
                     break;
+                case (constants.FETCH_SONGS_BY_GENRE):
+                    this.fetchSongsByGenre(action.data);
+                    break;
             }
         });
     }
@@ -42,6 +45,17 @@ class SCStoreClass extends EventEmitter {
     fetchLastSongs() {
         this.fetchClientId().then(() => {
             axios.get(`${this.baseUrl}/tracks/?client_id=${this.clientId}`)
+                .then((responseObject) => {
+                    this.songsList = responseObject.data;
+                    this.emit(constants.SONGS_LOADED)
+                })
+                .catch(() => this.emit(constants.ERROR_SONGS_LOADING));
+        });
+    }
+
+    fetchSongsByGenre(genreId) {
+        this.fetchClientId().then(() => {
+            axios.get(`${this.baseUrl}/tracks/?genres=${genreId}&client_id=${this.clientId}`)
                 .then((responseObject) => {
                     this.songsList = responseObject.data;
                     this.emit(constants.SONGS_LOADED)
@@ -84,15 +98,23 @@ class SCStoreClass extends EventEmitter {
                 'Trip Hop',
                 'World'
             ];
-
         for (let i = 0, len = genresNames.length; i < len; i++) {
             genres.push({
                 id: genresNames[i].toLowerCase().replace(/\s/g, '+'),
                 name: genresNames[i]
             });
         }
-
         return genres;
+    }
+
+    getGenreById(genreId) {
+        const genres = this.getGenres();
+        for (let i = 0, len = genres.length; i < len; i++) {
+            if (genreId == genres[i].id) {
+                return genres[i];
+            }
+        }
+        return null;
     }
 }
 

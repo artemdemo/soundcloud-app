@@ -13,4 +13,11 @@ export class SCAction {
             type: constants.FETCH_LAST_SONGS
         });
     }
+
+    static fetchSongsByGenre(genreId) {
+        Dispatcher.dispatch({
+            type: constants.FETCH_SONGS_BY_GENRE,
+            data: genreId
+        });
+    }
 }
