@@ -11,7 +11,7 @@ class StreamStoreClass extends EventEmitter {
     baseUrl = 'http://api.soundcloud.com';
     currentTrackId;
     currentSound;
-    currentPosition;
+    currentPosition = {};
     soundIsStreaming = false;
     posUpdaterID;
     timeoutID;
@@ -43,9 +43,16 @@ class StreamStoreClass extends EventEmitter {
      * @param trackId
      */
     playTrack(trackId) {
-        if ( !! this.currentSound ) {
-            this.currentSound.stop();
-            this.emit(constants.TRACK_STOPPED);
+        if (!trackId && this.currentSound && this.soundIsStreaming == false) {
+            this.currentSound.play();
+            this.soundIsStreaming = true;
+            this.emit(constants.TRACK_STARTED_PLAYING);
+            return;
+        } else if (!trackId) {
+            console.error('trackId is not provided');
+            return;
+        } else if (trackId && this.currentSound) {
+            this.pauseTrack();
         }
 
         this.initializeSC();
@@ -53,45 +60,76 @@ class StreamStoreClass extends EventEmitter {
         this.timeoutID = setTimeout(() => {
             // ToDo: Remove track from the list if it's not playing
 
+            this.soundIsStreaming = false;
             this.emit(constants.TRACK_STOPPED);
         }, SOUND_LOAD_MIN_TIMEOUT);
 
         SC.stream(`/tracks/${trackId}`)
             .then((sound) => {
-                sound.play();
-                this.currentTrackID = trackId;
                 this.currentSound = sound;
+                this.currentSound.play();
+                this.currentTrackId = trackId;
 
-                // http://stackoverflow.com/questions/24002302/soundcloud-javascript-sdk-2-0-whileplaying-event
                 this.posUpdaterID = setInterval(this.updatePosition, 100);
 
                 clearTimeout(this.timeoutID);
                 this.soundIsStreaming = true;
 
                 this.emit(constants.TRACK_STARTED_PLAYING);
+            }, () => {
+                this.soundIsStreaming = false;
+                this.emit(constants.TRACK_STOPPED);
             })
     }
+
+    pauseTrack = () => {
+        if (this.currentSound) {
+            this.currentSound.pause();
+            this.soundIsStreaming = false;
+            this.emit(constants.TRACK_STOPPED);
+        }
+    };
 
     /**
      * Update position of the given track, so it can be showed in UI
      */
-    updatePosition() {
-        var _loaded = this.currentSound.getLoadedPosition(),
-            _current = this.currentSound.getCurrentPosition();
+    updatePosition = () => {
+        let _duration;
+        let _current;
+
+        try {
+            _duration = this.currentSound.streamInfo ? this.currentSound.streamInfo.duration : 0;
+            _current = this.currentSound.currentTime();
+        } catch (e) {
+            console.error(e);
+            this.clearCurrentSoundAndTrack();
+            clearInterval(this.posUpdaterID);
+            return;
+        }
 
         // I want to update position only if it really changed
         if ( this.currentPosition.current != _current ) {
             this.currentPosition = {
                 current: _current,
-                loaded: _loaded,
-                relative: _loaded > 0 ? _current / _loaded * 100 : 0
+                duration: _duration,
+                relative: _duration > 0 ? _current / _duration * 100 : 0
             };
 
-            this.emit('TRACK_CHANGES_POSITION');
+            this.emit(constants.TRACK_CHANGES_POSITION);
         }
-    }
+    };
+
+    clearCurrentSoundAndTrack = () => {
+        this.currentTrackID = null;
+        this.currentSound = null;
+        this.soundIsStreaming = false;
+    };
 
     getCurrentTrackPosition = () => this.currentPosition;
+
+    getCurrentTrackId = () => this.currentTrackId;
+
+    isPlaying = () => this.currentTrackId && this.currentSound && this.soundIsStreaming;
 }
 
 export const StreamStore = new StreamStoreClass();
