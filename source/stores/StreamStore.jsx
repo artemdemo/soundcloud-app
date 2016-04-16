@@ -4,12 +4,12 @@ import SC from 'soundcloud';
 import {Dispatcher} from '../dispatcher';
 import * as constants from '../constants';
 import {SCStore} from './SCStore';
+import {SCAction} from '../actions/SCAction';
 
 const SOUND_LOAD_MIN_TIMEOUT = 1500;
 
 class StreamStoreClass extends EventEmitter {
     baseUrl = 'http://api.soundcloud.com';
-    currentTrackId;
     currentSound;
     currentPosition = {};
     soundIsStreaming = false;
@@ -69,7 +69,7 @@ class StreamStoreClass extends EventEmitter {
             .then((sound) => {
                 this.currentSound = sound;
                 this.currentSound.play();
-                this.currentTrackId = trackId;
+                SCAction.fetchComments(trackId);
 
                 clearTimeout(this.timeoutID);
                 this.soundIsStreaming = true;
@@ -126,16 +126,13 @@ class StreamStoreClass extends EventEmitter {
     };
 
     clearCurrentSoundAndTrack = () => {
-        this.currentTrackID = null;
         this.currentSound = null;
         this.soundIsStreaming = false;
     };
 
     getCurrentTrackPosition = () => this.currentPosition;
 
-    getCurrentTrackId = () => this.currentTrackId;
-
-    isPlaying = () => this.currentTrackId && this.currentSound && this.soundIsStreaming;
+    isPlaying = () => this.currentSound && this.soundIsStreaming;
 }
 
 export const StreamStore = new StreamStoreClass();

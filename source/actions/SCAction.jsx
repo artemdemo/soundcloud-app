@@ -7,7 +7,7 @@ export class SCAction {
             type: constants.FETCH_CLIENT_ID
         });
     }
-    
+
     static fetchLastSongs() {
         Dispatcher.dispatch({
             type: constants.FETCH_LAST_SONGS
@@ -19,5 +19,13 @@ export class SCAction {
             type: constants.FETCH_SONGS_BY_GENRE,
             data: genreId
         });
+    }
+
+    static fetchComments(trackId) {
+        Dispatcher.dispatch({
+            type: constants.FETCH_COMMENTS,
+            data: trackId
+        });
+
     }
 }
