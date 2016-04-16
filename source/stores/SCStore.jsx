@@ -33,6 +33,10 @@ class SCStoreClass extends EventEmitter {
             axios.get('soundcloud-key.json')
                 .then((responseObject) => {
                     this.clientId = responseObject.data.CLIENT_ID;
+                    console.log('emit');
+                    setTimeout(() => {
+                        this.emit(constants.CLIENT_ID_LOADED);
+                    }, 100);
                     resolve();
                 })
                 .catch(() => {
@@ -116,6 +120,8 @@ class SCStoreClass extends EventEmitter {
         }
         return null;
     }
+
+    getClientId = () => this.clientId;
 }
 
 export const SCStore = new SCStoreClass();
