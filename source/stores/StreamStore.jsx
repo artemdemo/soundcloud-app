@@ -13,7 +13,6 @@ class StreamStoreClass extends EventEmitter {
     currentSound;
     currentPosition = {};
     soundIsStreaming = false;
-    posUpdaterID;
     timeoutID;
     SCinitialized = false;
 
@@ -64,16 +63,19 @@ class StreamStoreClass extends EventEmitter {
             this.emit(constants.TRACK_STOPPED);
         }, SOUND_LOAD_MIN_TIMEOUT);
 
+        // Documentation for SDK:
+        // https://developers.soundcloud.com/docs/api/sdks
         SC.stream(`/tracks/${trackId}`)
             .then((sound) => {
                 this.currentSound = sound;
                 this.currentSound.play();
                 this.currentTrackId = trackId;
 
-                this.posUpdaterID = setInterval(this.updatePosition, 100);
-
                 clearTimeout(this.timeoutID);
                 this.soundIsStreaming = true;
+
+                this.currentSound.on('finish', () => this.pauseTrack());
+                this.currentSound.on('time', () => this.updatePosition());
 
                 this.emit(constants.TRACK_STARTED_PLAYING);
             }, () => {
@@ -84,7 +86,12 @@ class StreamStoreClass extends EventEmitter {
 
     pauseTrack = () => {
         if (this.currentSound) {
-            this.currentSound.pause();
+            try {
+                this.currentSound.pause();
+            } catch (e) {
+                console.warn('Error in soundcloud SDK');
+                this.clearCurrentSoundAndTrack();
+            }
             this.soundIsStreaming = false;
             this.emit(constants.TRACK_STOPPED);
         }
@@ -101,9 +108,8 @@ class StreamStoreClass extends EventEmitter {
             _duration = this.currentSound.streamInfo ? this.currentSound.streamInfo.duration : 0;
             _current = this.currentSound.currentTime();
         } catch (e) {
-            console.error(e);
+            console.warn('Error in soundcloud SDK');
             this.clearCurrentSoundAndTrack();
-            clearInterval(this.posUpdaterID);
             return;
         }
 
