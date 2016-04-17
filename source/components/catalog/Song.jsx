@@ -4,7 +4,9 @@ import {StreamAction} from '../../actions/StreamAction';
 import {StreamStore} from '../../stores/StreamStore';
 
 export class Song extends React.Component {
-    state = {};
+    state = {
+        selected: false
+    };
     defaultImage = 'dist/img/music-general.png';
 
     constructor(props) {
@@ -20,7 +22,9 @@ export class Song extends React.Component {
     }
 
     isPlaying = () => {
-
+        this.setState({
+            selected: this.props.song.id == StreamStore.getCurrentTrackId()
+        });
     };
 
     errorImageLoading = () => {
@@ -32,8 +36,9 @@ export class Song extends React.Component {
     };
 
     render() {
+        const songClass = this.state.selected ? 'catalog__list-item catalog__list-item_selected' : 'catalog__list-item';
         return (
-            <li className="catalog__list-item" ng-class="{ \'catalog__list-item_selected\' : track.selected }"
+            <li className={songClass}
                 onClick={this.playSong}>
                 <div className="track-list__image">
                     <img ref="songImage"

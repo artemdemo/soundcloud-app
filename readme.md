@@ -1,6 +1,8 @@
 # Soundcloud app
 
-In browser music app that uses sundcloud open API
+In browser music app that uses sundcloud open API.
+
+Sadly soundcloud SDK and API is far from perfect, but I will do my best to make it work.
 
 ## Important - API KEY (CLIENT ID)
 

@@ -11,6 +11,7 @@ const SOUND_LOAD_MIN_TIMEOUT = 1500;
 class StreamStoreClass extends EventEmitter {
     baseUrl = 'http://api.soundcloud.com';
     currentSound;
+    currentTrackId;
     currentPosition = {};
     soundIsStreaming = false;
     timeoutID;
@@ -69,15 +70,16 @@ class StreamStoreClass extends EventEmitter {
             .then((sound) => {
                 this.currentSound = sound;
                 this.currentSound.play();
-                SCAction.fetchComments(trackId);
 
-                clearTimeout(this.timeoutID);
-                this.soundIsStreaming = true;
-
+                this.currentSound.on('play-start', () => {
+                    this.currentTrackId = trackId;
+                    this.soundIsStreaming = true;
+                    SCAction.fetchComments(trackId);
+                    clearTimeout(this.timeoutID);
+                    this.emit(constants.TRACK_STARTED_PLAYING);
+                });
                 this.currentSound.on('finish', () => this.pauseTrack());
                 this.currentSound.on('time', () => this.updatePosition());
-
-                this.emit(constants.TRACK_STARTED_PLAYING);
             }, () => {
                 this.soundIsStreaming = false;
                 this.emit(constants.TRACK_STOPPED);
@@ -127,14 +129,17 @@ class StreamStoreClass extends EventEmitter {
 
     clearCurrentSoundAndTrack = () => {
         this.currentSound = null;
+        this.currentTrackId = null;
         this.soundIsStreaming = false;
     };
 
     getCurrentTrackPosition = () => this.currentPosition;
-    
+
+    getCurrentTrackId = () => this.currentTrackId;
+
     getCurrentSound = () => this.currentSound;
 
-    isPlaying = () => this.currentSound && this.soundIsStreaming;
+    isPlaying = () => this.currentTrackId && this.currentSound && this.soundIsStreaming;
 }
 
 export const StreamStore = new StreamStoreClass();
