@@ -28,6 +28,9 @@ class StreamStoreClass extends EventEmitter {
         });
     }
 
+    /**
+     * Initializing SC SDK
+     */
     initializeSC() {
         if (!this.SCinitialized) {
             this.SCinitialized = true;
@@ -39,8 +42,7 @@ class StreamStoreClass extends EventEmitter {
 
     /**
      * Start playing track by given id
-     *
-     * @param trackId
+     * @param trackId {number}
      */
     playTrack(trackId) {
         if (!trackId && this.currentSound && this.soundIsStreaming == false) {
@@ -86,6 +88,9 @@ class StreamStoreClass extends EventEmitter {
             })
     }
 
+    /**
+     * Pause currently playing track
+     */
     pauseTrack = () => {
         if (this.currentSound) {
             try {

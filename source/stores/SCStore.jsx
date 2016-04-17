@@ -32,6 +32,10 @@ class SCStoreClass extends EventEmitter {
         });
     }
 
+    /**
+     * Load client id for stream API calls
+     * @returns {Promise}
+     */
     fetchClientId() {
         return new Promise((resolve, reject) => {
             if (this.clientId) {
@@ -50,6 +54,9 @@ class SCStoreClass extends EventEmitter {
         });
     }
 
+    /**
+     * Load last tracks
+     */
     fetchLastSongs() {
         this.fetchClientId().then(() => {
             axios.get(`${this.baseUrl}/tracks/?client_id=${this.clientId}`)
@@ -61,6 +68,10 @@ class SCStoreClass extends EventEmitter {
         });
     }
 
+    /**
+     * Load tracks by given genre name
+     * @param genreId {number}
+     */
     fetchSongsByGenre(genreId) {
         this.fetchClientId().then(() => {
             axios.get(`${this.baseUrl}/tracks/?genres=${genreId}&client_id=${this.clientId}`)
@@ -72,6 +83,10 @@ class SCStoreClass extends EventEmitter {
         });
     }
 
+    /**
+     * Load tracks by given search query
+     * @param query {string}
+     */
     searchSongs(query) {
         this.fetchClientId().then(() => {
             axios.get(`${this.baseUrl}/tracks/?q=${query}&client_id=${this.clientId}`)
@@ -83,12 +98,44 @@ class SCStoreClass extends EventEmitter {
         });
     }
 
+    /**
+     * Load comments by given track id
+     * @param trackId
+     */
     fetchTrackComments(trackId) {
         axios.get(`${this.baseUrl}/tracks/${trackId}/comments?client_id=${this.clientId}`)
             .then((responseObject) => {
                 this.comments = responseObject.data;
                 this.emit(constants.COMMENTS_LOADED)
             });
+    }
+
+    /**
+     * Fetch next track by given track id
+     * @param trackId {number}
+     * @returns {Object|null}
+     */
+    getNextTrack(trackId) {
+        for (let i = 0, len = this.songsList.length; i < len; i++) {
+            if (this.songsList[i].id == trackId && this.songsList[i+1]) {
+                return this.songsList[i+1]
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Fetch previous track by given track id
+     * @param trackId {number}
+     * @returns {Object|null}
+     */
+    getPrevTrack(trackId) {
+        for (let i = 1, len = this.songsList.length; i < len; i++) {
+            if (this.songsList[i].id == trackId) {
+                return this.songsList[i-1]
+            }
+        }
+        return null;
     }
 
     getSongsList = () => this.songsList;
