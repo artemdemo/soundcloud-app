@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as constants from '../constants';
 import {SCStore} from '../stores/SCStore';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 export class Comments extends React.Component {
     state = {
@@ -45,7 +46,16 @@ export class Comments extends React.Component {
             <div className={commentsClass}>
                 <div className="comments__title">Comments</div>
                 <ul className="comments__list flat-list">
-                    {this.renderComments()}
+                    <ReactCSSTransitionGroup
+                        transitionEnterTimeout={constants.TRANSITION_ENTER}
+                        transitionLeaveTimeout={constants.TRANSITION_LEAVE}
+                        transitionName={{
+                            enter: 'ng-enter',
+                            leave: 'ng-leave',
+                            appear: 'ng-appear'
+                        }}>
+                        {this.renderComments()}
+                    </ReactCSSTransitionGroup>
                 </ul>
             </div>
         )

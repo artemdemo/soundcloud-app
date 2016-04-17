@@ -3,6 +3,7 @@ import * as constants from '../../constants';
 import {Song} from './Song';
 import {SCAction} from '../../actions/SCAction';
 import {SCStore} from '../../stores/SCStore';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const LAST_SONGS = 'Last songs';
 
@@ -85,9 +86,18 @@ export class Catalog extends React.Component {
                 <div className="catalog__title">{this.state.title}</div>
                 { this.renderLoader() }
                 <ul className="catalog__list flat-list clearFix">
-                    {this.state.songs.map(song => (
-                        <Song song={song} key={song.id}></Song>
-                    ))}
+                    <ReactCSSTransitionGroup
+                        transitionEnterTimeout={constants.TRANSITION_ENTER}
+                        transitionLeaveTimeout={constants.TRANSITION_LEAVE}
+                        transitionName={{
+                            enter: 'ng-enter',
+                            leave: 'ng-leave',
+                            appear: 'ng-appear'
+                        }}>
+                        {this.state.songs.map(song => (
+                            <Song song={song} key={song.id}></Song>
+                        ))}
+                    </ReactCSSTransitionGroup>
                 </ul>
             </div>
         )
