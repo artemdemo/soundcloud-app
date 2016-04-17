@@ -131,6 +131,8 @@ class StreamStoreClass extends EventEmitter {
     };
 
     getCurrentTrackPosition = () => this.currentPosition;
+    
+    getCurrentSound = () => this.currentSound;
 
     isPlaying = () => this.currentSound && this.soundIsStreaming;
 }

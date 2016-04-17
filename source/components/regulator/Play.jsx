@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as constants from '../../constants';
+import {SCStore} from '../../stores/SCStore';
 import {StreamStore} from '../../stores/StreamStore';
 
 export class Play extends React.Component {
@@ -25,7 +26,17 @@ export class Play extends React.Component {
         if (StreamStore.isPlaying()) {
             StreamStore.pauseTrack();
         } else {
-            StreamStore.playTrack();
+            const currentSound = StreamStore.getCurrentSound();
+            if (currentSound) {
+                StreamStore.playTrack();
+            } else {
+                const songs = SCStore.getSongsList();
+                if (songs.length > 0) {
+                    StreamStore.playTrack(songs[0].id);
+                } else {
+                    console.error('There is no loaded songs');
+                }
+            }
         }
     };
 
