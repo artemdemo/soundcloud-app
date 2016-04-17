@@ -13,6 +13,9 @@ ReactDOM.render(
             <Route path="genre">
                 <Route path=":genreType" component={Catalog}/>
             </Route>
+            <Route path="search">
+                <Route path=":searchQuery" component={Catalog}/>
+            </Route>
         </Route>
     </Router>,
     document.getElementById(constants.MAIN_CONTAINER_ID));

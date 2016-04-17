@@ -28,7 +28,7 @@ export class Comments extends React.Component {
     renderComments = () => {
         if (this.state.comments.length > 0) {
             return this.state.comments.map(comment => (
-                <li className="comments__list-item">
+                <li className="comments__list-item" key={comment.id}>
                     {comment.body}
                 </li>
             ))

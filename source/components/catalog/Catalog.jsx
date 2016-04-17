@@ -17,11 +17,7 @@ export class Catalog extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.params.hasOwnProperty('genreType')) {
-            this.updateGenre(this.props.params.genreType);
-        } else {
-            SCAction.fetchLastSongs();
-        }
+        this.updateSongsState(this.props.params);
         SCStore.on(constants.SONGS_LOADED, this.updateSongsList);
     }
 
@@ -30,8 +26,14 @@ export class Catalog extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.hasOwnProperty('genreType')) {
-            this.updateGenre(nextProps.params.genreType);
+        this.updateSongsState(nextProps.params);
+    }
+
+    updateSongsState(propsParams) {
+        if (propsParams.hasOwnProperty('genreType')) {
+            this.updateGenre(propsParams.genreType);
+        } else if (propsParams.hasOwnProperty('searchQuery')) {
+            this.updateSearch(propsParams.searchQuery);
         } else {
             this.setState({
                 title: LAST_SONGS,
@@ -39,6 +41,14 @@ export class Catalog extends React.Component {
             });
             SCAction.fetchLastSongs();
         }
+    }
+
+    updateSearch(query) {
+        this.setState({
+            title: 'Search: ' + decodeURI(query),
+            songs: []
+        });
+        SCAction.fetchSongsBySearch(query);
     }
 
     updateGenre(genreType) {

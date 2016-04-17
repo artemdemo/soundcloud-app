@@ -22,6 +22,9 @@ class SCStoreClass extends EventEmitter {
                 case (constants.FETCH_SONGS_BY_GENRE):
                     this.fetchSongsByGenre(action.data);
                     break;
+                case (constants.SEARCH_SONGS):
+                    this.searchSongs(action.data);
+                    break;
                 case (constants.FETCH_COMMENTS):
                     this.fetchTrackComments(action.data);
                     break;
@@ -61,6 +64,17 @@ class SCStoreClass extends EventEmitter {
     fetchSongsByGenre(genreId) {
         this.fetchClientId().then(() => {
             axios.get(`${this.baseUrl}/tracks/?genres=${genreId}&client_id=${this.clientId}`)
+                .then((responseObject) => {
+                    this.songsList = responseObject.data;
+                    this.emit(constants.SONGS_LOADED)
+                })
+                .catch(() => this.emit(constants.ERROR_SONGS_LOADING));
+        });
+    }
+
+    searchSongs(query) {
+        this.fetchClientId().then(() => {
+            axios.get(`${this.baseUrl}/tracks/?q=${query}&client_id=${this.clientId}`)
                 .then((responseObject) => {
                     this.songsList = responseObject.data;
                     this.emit(constants.SONGS_LOADED)

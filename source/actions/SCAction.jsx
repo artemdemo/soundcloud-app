@@ -20,12 +20,18 @@ export class SCAction {
             data: genreId
         });
     }
+    
+    static fetchSongsBySearch(query) {
+        Dispatcher.dispatch({
+            type: constants.SEARCH_SONGS,
+            data: query
+        });
+    }
 
     static fetchComments(trackId) {
         Dispatcher.dispatch({
             type: constants.FETCH_COMMENTS,
             data: trackId
         });
-
     }
 }
