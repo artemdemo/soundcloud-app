@@ -27,6 +27,13 @@ export class SCAction {
             data: query
         });
     }
+    
+    static fetchUser(userId) {
+        Dispatcher.dispatch({
+            type: constants.FETCH_USER,
+            data: userId
+        });
+    }
 
     static fetchComments(trackId) {
         Dispatcher.dispatch({

@@ -8,6 +8,7 @@ class SCStoreClass extends EventEmitter {
     baseUrl = 'http://api.soundcloud.com';
     songsList = [];
     comments = [];
+    currentUser;
 
     constructor() {
         super();
@@ -27,6 +28,9 @@ class SCStoreClass extends EventEmitter {
                     break;
                 case (constants.FETCH_COMMENTS):
                     this.fetchTrackComments(action.data);
+                    break;
+                case (constants.FETCH_USER):
+                    this.fetchUserById(action.data);
                     break;
             }
         });
@@ -110,6 +114,14 @@ class SCStoreClass extends EventEmitter {
             });
     }
 
+    fetchUserById(userId) {
+        axios.get(`${this.baseUrl}/users/${userId}/?client_id=${this.clientId}`)
+            .then((responseObject) => {
+                this.currentUser = responseObject.data;
+                this.emit(constants.USER_LOADED)
+            });
+    }
+
     /**
      * Fetch next track by given track id
      * @param trackId {number}
@@ -138,9 +150,25 @@ class SCStoreClass extends EventEmitter {
         return null;
     }
 
+    /**
+     * Get track by id from songs list
+     * @param trackId {number}
+     * @returns {Object|null}
+     */
+    getTrackById(trackId) {
+        for (let i = 0, len = this.songsList.length; i < len; i++) {
+            if (this.songsList[i].id == trackId) {
+                return this.songsList[i]
+            }
+        }
+        return null;
+    }
+
     getSongsList = () => this.songsList;
 
     getComments = () => this.comments;
+
+    getCurrentUser = () => this.currentUser;
 
     getGenres() {
         let genres = [];

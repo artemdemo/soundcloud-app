@@ -3,6 +3,7 @@ import {Progress} from './Progress';
 import {Backward} from './Backward';
 import {Play} from './Play';
 import {Forward} from './Forward';
+import {AuthorAvatar} from './AuthorAvatar';
 import * as constants from '../../constants';
 import {StreamStore} from '../../stores/StreamStore';
 
@@ -48,9 +49,7 @@ export class Regulator extends React.Component {
     render() {
         return (
             <div className="regulator regulator_header">
-                <div className="avatar" ng-click="openUser()">
-                    <img className="avatar__image" ng-src="{{ avatar }}" />
-                </div>
+                <AuthorAvatar></AuthorAvatar>
                 <div className="player-controls">
                     <Backward></Backward>
                     <Play></Play>

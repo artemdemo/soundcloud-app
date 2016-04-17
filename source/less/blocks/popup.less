@@ -1,0 +1,158 @@
+@animation-duration: 200ms;
+
+.animated {
+    animation-duration: @animation-duration;
+    animation-fill-mode: both;
+}
+.position-absolute {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}
+popup {
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+}
+.popup-backdrop {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    animation-duration: @animation-duration;
+    animation-fill-mode: both;
+    z-index: 1500;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.popup-container {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: 1501;
+}
+.popup-container {
+    .popup {
+        animation-duration: @animation-duration;
+        animation-fill-mode: both;
+        top: 40%;
+        left: 50%;
+        color: black;
+        max-height: 50%;
+        border-radius: 5px;
+        position: absolute;
+        width: 350px;
+        padding: 0 8px 7px 8px;
+        background-color: #ffffff;
+        margin-left: -175px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .popup-body {
+        margin-bottom: 10px;
+    }
+
+    .popup-title {
+        margin: 0;
+        text-align: center;
+        padding: 13px 5px 10px 5px;
+    }
+}
+
+.popup-buttons {
+    text-align: right;
+
+    .btn {
+        border: 0;
+        background-color: #334898;
+        color: white;
+        border-radius: 3px;
+        cursor: pointer;
+        padding: 6px 16px;
+        font-weight: bold;
+    }
+}
+
+
+.popup__image-container {
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin-right: 7px;
+}
+.popup__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+}
+
+.popup-user__text-title {
+    font-weight: bold;
+}
+
+.popup-user__text {
+    min-height: 100px
+}
+
+
+
+@keyframes zoomIn {
+    0% {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    50% {
+        opacity: 1;
+    }
+}
+.zoomIn {
+    animation-name: zoomIn;
+}
+
+@keyframes zoomOut {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.zoomOut {
+    animation-name: zoomOut;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.fadeIn {
+    animation-name: fadeIn;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.fadeOut {
+    animation-name: fadeOut;
+}
