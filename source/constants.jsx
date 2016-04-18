@@ -21,6 +21,7 @@ export const CLIENT_ID_LOADED = 'CLIENT_ID_LOADED';
 export const ERROR_CLIENT_ID_LOADING = 'ERROR_CLIENT_ID_LOADING';
 
 export const OPEN_POPUP = 'OPEN_POPUP';
+export const CLOSE_POPUP = 'CLOSE_POPUP';
 
 export const TRANSITION_ENTER = 500;
 export const TRANSITION_LEAVE = 500;

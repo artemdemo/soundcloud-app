@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as constants from '../constants';
+import {SCStore} from '../stores/SCStore';
 import {PopupStore} from '../stores/PopupStore';
 
 export class Popup extends React.Component {
     state = {
-        title: '',
-        body: '',
+        user: {},
         animationIn: false,
         animationOut: false
     };
@@ -26,6 +26,7 @@ export class Popup extends React.Component {
 
     open = () => {
         this.setState({
+            user: SCStore.getCurrentUser() || {},
             animationIn: true,
             animationOut: false
         });
@@ -45,9 +46,10 @@ export class Popup extends React.Component {
     };
 
     render() {
-        const title = '';
-        const country = '';
-        const description = '';
+        const title = this.state.user.full_name || '';
+        const country = this.state.user.country || '';
+        const description = this.state.user.description || '';
+        const avatar = this.state.user.avatar_url || '';
         let popupClass = 'popup';
         let backdropClass = 'popup-backdrop';
         if (this.state.animationIn && !this.state.animationOut) {
@@ -67,13 +69,18 @@ export class Popup extends React.Component {
                             <h3 className="popup-title">{title}</h3>
                         </div>
                         <div className="popup-body">
-                            <div>
-                                <span class="popup-user__text-title">Country: </span>
-                                {country}
+                            <div className="popup__image-container">
+                                <img className="popup__image" src={avatar} />
                             </div>
-                            <div>
-                                <span class="popup-user__text-title">Description: </span>
-                                {description}
+                            <div className="popup-user__text">
+                                <div>
+                                    <span className="popup-user__text-title">Country: </span>
+                                    {country}
+                                </div>
+                                <div>
+                                    <span className="popup-user__text-title">Description: </span>
+                                    {description}
+                                </div>
                             </div>
                         </div>
                         <div className="popup-buttons">

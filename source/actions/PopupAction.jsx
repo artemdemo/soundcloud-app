@@ -8,4 +8,10 @@ export class PopupAction {
             data: user
         });
     }
+    
+    static close() {
+        Dispatcher.dispatch({
+            type: constants.CLOSE_POPUP
+        });
+    }
 }

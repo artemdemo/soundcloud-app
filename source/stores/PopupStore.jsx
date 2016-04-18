@@ -13,12 +13,19 @@ class PopupStoreClass extends EventEmitter {
                     this.openPopup();
                     this.user = action.data;
                     break;
+                case constants.CLOSE_POPUP:
+                    this.closePopup();
+                    break;
             }
         });
     }
 
     openPopup() {
         this.emit(constants.OPEN_POPUP);
+    };
+
+    closePopup() {
+        this.emit(constants.CLOSE_POPUP);
     };
 
     getUser = () => this.user;

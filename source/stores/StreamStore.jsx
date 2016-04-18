@@ -97,9 +97,8 @@ class StreamStoreClass extends EventEmitter {
                 this.currentSound.pause();
             } catch (e) {
                 console.warn('Error in soundcloud SDK');
-                this.clearCurrentSoundAndTrack();
             }
-            this.soundIsStreaming = false;
+            this.clearCurrentSoundAndTrack();
             this.emit(constants.TRACK_STOPPED);
         }
     };

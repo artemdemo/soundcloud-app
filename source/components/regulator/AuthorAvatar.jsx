@@ -43,7 +43,9 @@ export class AuthorAvatar extends React.Component {
     };
 
     openUser = () => {
-        PopupAction.open(this.user);
+        if (this.user) {
+            PopupAction.open();
+        }
     };
 
     render() {
