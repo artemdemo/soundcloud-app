@@ -1,6 +1,5 @@
 import * as React from 'react';
 import EventEmitter from 'eventemitter3';
-import SC from 'soundcloud';
 import {Dispatcher} from '../dispatcher';
 import * as constants from '../constants';
 import {SCStore} from './SCStore';
@@ -15,6 +14,7 @@ class StreamStoreClass extends EventEmitter {
     currentPosition = {};
     soundIsStreaming = false;
     timeoutID;
+    posUpdaterID;
     SCinitialized = false;
 
     constructor() {
@@ -54,7 +54,7 @@ class StreamStoreClass extends EventEmitter {
             console.error('trackId is not provided');
             return;
         } else if (trackId && this.currentSound) {
-            this.pauseTrack();
+            this.stopTrack();
         }
 
         this.initializeSC();
@@ -68,36 +68,32 @@ class StreamStoreClass extends EventEmitter {
 
         // Documentation for SDK:
         // https://developers.soundcloud.com/docs/api/sdks
-        SC.stream(`/tracks/${trackId}`)
-            .then((sound) => {
-                this.currentSound = sound;
-                this.currentSound.play();
+        SC.stream(`/tracks/${trackId}`, (sound) => {
+            this.currentSound = sound;
+            this.currentSound.play();
 
-                this.currentSound.on('play-start', () => {
-                    this.currentTrackId = trackId;
-                    this.soundIsStreaming = true;
-                    SCAction.fetchComments(trackId);
-                    clearTimeout(this.timeoutID);
-                    this.emit(constants.TRACK_STARTED_PLAYING);
-                });
-                this.currentSound.on('finish', () => this.pauseTrack());
-                this.currentSound.on('time', () => this.updatePosition());
-            }, () => {
-                this.soundIsStreaming = false;
-                this.emit(constants.TRACK_STOPPED);
-            })
+            this.posUpdaterID = setInterval(this.updatePosition, 100);
+
+            this.currentTrackId = trackId;
+            this.soundIsStreaming = true;
+            SCAction.fetchComments(trackId);
+            clearTimeout(this.timeoutID);
+            this.emit(constants.TRACK_STARTED_PLAYING);
+        });
     }
 
     /**
      * Pause currently playing track
      */
-    pauseTrack = () => {
+    stopTrack = () => {
         if (this.currentSound) {
-            try {
-                this.currentSound.pause();
-            } catch (e) {
-                console.warn('Error in soundcloud SDK');
-            }
+            clearInterval(this.posUpdaterID);
+            this.currentSound.stop();
+            this.currentPosition = {
+                current: 0,
+                duration: 0,
+                relative: 0
+            };
             this.clearCurrentSoundAndTrack();
             this.emit(constants.TRACK_STOPPED);
         }
@@ -107,17 +103,9 @@ class StreamStoreClass extends EventEmitter {
      * Update position of the given track, so it can be showed in UI
      */
     updatePosition = () => {
-        let _duration;
-        let _current;
-
-        try {
-            _duration = this.currentSound.streamInfo ? this.currentSound.streamInfo.duration : 0;
-            _current = this.currentSound.currentTime();
-        } catch (e) {
-            console.warn('Error in soundcloud SDK');
-            this.clearCurrentSoundAndTrack();
-            return;
-        }
+        console.log('updatePosition');
+        let _duration = this.currentSound.getLoadedPosition();
+        let _current = this.currentSound.getCurrentPosition();
 
         // I want to update position only if it really changed
         if ( this.currentPosition.current != _current ) {

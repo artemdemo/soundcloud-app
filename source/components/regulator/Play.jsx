@@ -24,7 +24,7 @@ export class Play extends React.Component {
 
     togglePlay = () => {
         if (StreamStore.isPlaying()) {
-            StreamStore.pauseTrack();
+            StreamStore.stopTrack();
         } else {
             const currentSound = StreamStore.getCurrentSound();
             if (currentSound) {
@@ -49,7 +49,7 @@ export class Play extends React.Component {
     });
 
     render() {
-        const playBtnClass = this.state.isPlaying ? 'fa fa-pause' : 'fa fa-play';
+        const playBtnClass = this.state.isPlaying ? 'fa fa-stop' : 'fa fa-play';
         return (
             <div className="player-controls__item player-controls__play" onClick={this.togglePlay}>
                 <span className={playBtnClass}></span>
