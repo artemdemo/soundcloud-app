@@ -22,7 +22,7 @@ Format should be as following:
 Install all modules and dependencies
 
 ```
-$ npm i
+$ npm i && typings i
 ```
 
 Compile client app for production:

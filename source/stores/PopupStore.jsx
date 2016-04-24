@@ -3,7 +3,7 @@ import {Dispatcher} from '../dispatcher';
 import * as constants from '../constants';
 
 class PopupStoreClass extends EventEmitter {
-    user  = null;
+    user = null;
 
     constructor() {
         super();

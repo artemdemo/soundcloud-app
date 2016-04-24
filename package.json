@@ -7,7 +7,7 @@
     "build": "gulp build",
     "dev": "gulp build --dev",
     "watch": "gulp watch --dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,25 @@
     "url": "https://github.com/artemdemo/soundcloud-app/issues"
   },
   "homepage": "https://github.com/artemdemo/soundcloud-app#readme",
+  "jest": {
+    "scriptPreprocessor": "./test-preprocessor.js",
+    "testFileExtensions": [
+      "es6",
+      "jsx",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6",
+      "jsx"
+    ],
+    "unmockedModulePathPatterns": [
+      "./node_modules/react",
+      "./node_modules/react-dom",
+      "./node_modules/react-addons-test-utils"
+    ]
+  },
   "devDependencies": {
     "axios": "^0.9.1",
     "babel-core": "^6.7.5",
@@ -37,8 +56,10 @@
     "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.7",
     "history": "^2.0.1",
+    "jest-cli": "^11.0.2",
     "react": "^15.0.1",
     "react-addons-css-transition-group": "^15.0.1",
+    "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-router": "^2.0.1",
     "run-sequence": "^1.1.5",

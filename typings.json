@@ -1,0 +1,5 @@
+{
+  "ambientDependencies": {
+    "jest": "registry:dt/jest#0.9.0+20160319033628"
+  }
+}

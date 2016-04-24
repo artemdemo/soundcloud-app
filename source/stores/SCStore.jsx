@@ -4,7 +4,7 @@ import {Dispatcher} from '../dispatcher';
 import * as constants from '../constants';
 
 class SCStoreClass extends EventEmitter {
-    clientId;
+    clientId = null;
     baseUrl = 'http://api.soundcloud.com';
     songsList = [];
     comments = [];
